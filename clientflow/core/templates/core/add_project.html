@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+  <h4 class="mb-4 text-center">Add Project for {{ client.name }}</h4>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <input class="form-control" name="title" placeholder="Project Title" required>
+    </div>
+
+    <div class="mb-3">
+      <textarea class="form-control" name="description" rows="3" placeholder="Project Description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <input class="form-control" type="date" name="deadline" required>
+    </div>
+
+    <div class="mb-3">
+      <select class="form-select" name="status">
+        <option>Pending</option>
+        <option>In Progress</option>
+        <option>Completed</option>
+      </select>
+    </div>
+
+    <button class="btn btn-success w-100">Add Project</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row g-3">
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Clients</h6>
+        <h3>{{ clients_count }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Projects</h6>
+        <h3>{{ projects_count }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Tasks</h6>
+        <h3>{{ tasks_count }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h6>Completed Tasks</h6>
+        <h3>{{ completed_tasks }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-6">
+    <div class="card p-3 shadow">
+      <h5 class="text-center">Project Status</h5>
+      <canvas id="projectStatusChart"></canvas>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card p-3 shadow">
+      <h5 class="text-center">Task Completion</h5>
+      <canvas id="taskChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+const projectStatusLabels = [{% for i in project_status %}"{{ i.status }}",{% endfor %}];
+const projectStatusCounts = [{% for i in project_status %}{{ i.count }},{% endfor %}];
+const completedTasks = {{ completed_tasks }};
+const pendingTasks = {{ pending_tasks }};
+</script>
+
+<script>
+new Chart(document.getElementById('projectStatusChart'), {
+  type: 'pie',
+  data: {
+    labels: projectStatusLabels,
+    datasets: [{
+      data: projectStatusCounts,
+      backgroundColor: ['#6366f1', '#22c55e', '#f97316']
+    }]
+  }
+});
+
+new Chart(document.getElementById('taskChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Completed', 'Pending'],
+    datasets: [{
+      data: [completedTasks, pendingTasks],
+      backgroundColor: ['#22c55e', '#ef4444']
+    }]
+  }
+});
+</script>
+
+{% endblock %}

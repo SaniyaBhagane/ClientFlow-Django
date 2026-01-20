@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<h3 class="mb-3">Tasks – {{ project.title }}</h3>
+
+<a class="btn btn-primary mb-3" href="{% url 'add_task' project.id %}">+ Add Task</a>
+
+<div class="list-group">
+  {% for task in tasks %}
+  <div class="list-group-item bg-dark text-light border-secondary d-flex justify-content-between align-items-center">
+    <div>
+      <strong>{{ task.title }}</strong>
+      <span class="badge bg-info ms-2">{{ task.priority }}</span>
+      {% if task.status %}
+        <span class="badge bg-success ms-2">Completed</span>
+      {% else %}
+        <span class="badge bg-warning ms-2">Pending</span>
+      {% endif %}
+    </div>
+
+    <div>
+      <a class="btn btn-sm btn-outline-warning" href="{% url 'update_task' task.id %}">Edit</a>
+      <a class="btn btn-sm btn-outline-danger" href="{% url 'delete_task' task.id %}">Delete</a>
+    </div>
+  </div>
+  {% empty %}
+  <p>No tasks found</p>
+  {% endfor %}
+</div>
+
+<a class="d-block mt-3" href="{% url 'project_list' project.client.id %}">⬅ Back</a>
+
+{% endblock %}

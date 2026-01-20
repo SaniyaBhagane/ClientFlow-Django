@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+<div class="card shadow p-4 mx-auto" style="max-width: 500px;">
+  <h4 class="mb-4 text-center">Add Client</h4>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <input class="form-control" name="name" placeholder="Client Name" required>
+    </div>
+
+    <div class="mb-3">
+      <input class="form-control" type="email" name="email" placeholder="Email" required>
+    </div>
+
+    <div class="mb-3">
+      <input class="form-control" name="phone" placeholder="Phone" required>
+    </div>
+
+    <div class="mb-3">
+      <input class="form-control" name="company" placeholder="Company">
+    </div>
+
+    <button class="btn btn-primary w-100">Add Client</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="card p-4 shadow">
+  <h4 class="text-danger">Confirm Delete</h4>
+  <p>Are you sure you want to delete <strong>{{ task.title }}</strong>?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'task_list' task.project.id %}" class="btn btn-secondary">
+      Cancel
+    </a>
+  </form>
+</div>
+{% endblock %}
