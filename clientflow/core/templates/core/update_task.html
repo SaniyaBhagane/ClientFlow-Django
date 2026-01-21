@@ -4,6 +4,13 @@
 <div class="card shadow p-4 mx-auto" style="max-width: 500px;">
   <h4 class="mb-4 text-center">Update Task</h4>
 
+  {% if task.depends_on and not task.depends_on.status %}
+    <div class="alert alert-danger text-center">
+      🚫 This task is blocked by
+      <strong>{{ task.depends_on.title }}</strong>
+    </div>
+  {% endif %}
+
   <form method="post">
     {% csrf_token %}
 
@@ -20,11 +27,18 @@
     </div>
 
     <div class="form-check mb-3">
-      <input class="form-check-input" type="checkbox" name="status" {% if task.status %}checked{% endif %}>
+      <input class="form-check-input"
+             type="checkbox"
+             name="status"
+             {% if task.status %}checked{% endif %}
+             {% if task.depends_on and not task.depends_on.status %}disabled{% endif %}>
       <label class="form-check-label">Completed</label>
     </div>
 
-    <button class="btn btn-success w-100">Update</button>
+    <button class="btn btn-success w-100"
+            {% if task.depends_on and not task.depends_on.status %}disabled{% endif %}>
+      Update
+    </button>
   </form>
 </div>
 

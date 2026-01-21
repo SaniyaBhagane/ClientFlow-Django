@@ -32,17 +32,22 @@ class Project(models.Model):
 
 
 class Task(models.Model):
-    PRIORITY_CHOICES = (
-        ('Low', 'Low'),
-        ('Medium', 'Medium'),
-        ('High', 'High'),
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    priority = models.CharField(max_length=10)
+    status = models.BooleanField(default=False)
+
+    # NEW: Dependency
+    depends_on = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='blocked_tasks'
     )
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks')
-    title = models.CharField(max_length=150)
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
-    status = models.BooleanField(default=False)  # False = Pending, True = Completed
-    created_at = models.DateTimeField(auto_now_add=True)
+    def is_blocked(self):
+        return self.depends_on and not self.depends_on.status
 
     def __str__(self):
         return self.title

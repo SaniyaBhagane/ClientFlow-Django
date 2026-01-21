@@ -1,18 +1,49 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<h2>Add Task for {{ project.title }}</h2>
 
-<form method="post">
+<div class="card shadow p-4 mx-auto" style="max-width: 500px;">
+  <h4 class="mb-4 text-center">Add Task for {{ project.title }}</h4>
+
+  <form method="post">
     {% csrf_token %}
-    <input type="text" name="title" placeholder="Task Title" required><br><br>
 
-    <select name="priority">
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-    </select><br><br>
+    <!-- Task Title -->
+    <div class="mb-3">
+      <input class="form-control"
+             type="text"
+             name="title"
+             placeholder="Task Title"
+             required>
+    </div>
 
-    <button type="submit">Add Task</button>
-</form>
+    <!-- Priority -->
+    <div class="mb-3">
+      <select class="form-select" name="priority">
+        <option value="Low">Low Priority</option>
+        <option value="Medium">Medium Priority</option>
+        <option value="High">High Priority</option>
+      </select>
+    </div>
+
+    <!-- 🔗 Dependency (NEW FEATURE) -->
+    <div class="mb-3">
+      <label class="form-label text-secondary">
+        Depends on (optional)
+      </label>
+      <select class="form-select" name="depends_on">
+        <option value="">None</option>
+        {% for task in existing_tasks %}
+          <option value="{{ task.id }}">{{ task.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn btn-primary w-100">
+      Add Task
+    </button>
+  </form>
+</div>
+
 {% endblock %}

@@ -14,6 +14,14 @@
             background-color: #0f172a;
         }
 
+        .btn-outline-danger {
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-danger:hover {
+            transform: scale(1.05);
+        }
+
         .card {
             background-color: #020617;
             border: 1px solid #1e293b;
@@ -53,7 +61,6 @@
 </head>
 
 <body class="bg-dark text-light">
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-sm">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">ClientFlow</a>
@@ -68,9 +75,20 @@
         </li>
       </ul>
 
-      <span class="navbar-text text-secondary">
-        {{ request.user.username }}
-      </span>
+      <!-- RIGHT SIDE -->
+      <div class="d-flex align-items-center gap-3">
+        <span class="text-secondary small">
+          {{ request.user.username }}
+        </span>
+
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="btn btn-outline-danger btn-sm">
+            Logout
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
 </nav>

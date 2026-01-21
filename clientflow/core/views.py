@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Client, Project, Task
 from django.db.models import Count
+from django.contrib.auth import logout
 
 @login_required
 def dashboard(request):
@@ -106,19 +107,32 @@ def add_task(request, project_id):
         client__user=request.user
     )
 
+    # 🔹 Fetch existing tasks for dependency dropdown
+    existing_tasks = Task.objects.filter(project=project)
+
     if request.method == 'POST':
         title = request.POST['title']
         priority = request.POST['priority']
 
+        # 🔹 Handle dependency
+        depends_on_id = request.POST.get('depends_on')
+        depends_on = (
+            Task.objects.get(id=depends_on_id)
+            if depends_on_id else None
+        )
+
         Task.objects.create(
             project=project,
             title=title,
-            priority=priority
+            priority=priority,
+            depends_on=depends_on
         )
+
         return redirect('task_list', project_id=project.id)
 
     return render(request, 'core/add_task.html', {
-        'project': project
+        'project': project,
+        'existing_tasks': existing_tasks
     })
     
 @login_required
@@ -155,3 +169,8 @@ def delete_task(request, task_id):
     return render(request, 'core/confirm_delete.html', {
         'task': task
     })
+
+
+def custom_logout(request):
+    logout(request)
+    return redirect('login')
